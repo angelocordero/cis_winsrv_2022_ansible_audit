@@ -1,0 +1,24 @@
+---
+- name: 2.2.31 | Ensure 'Generate security audits' is set to 'LOCAL SERVICE, NETWORK SERVICE'
+  read_secpol:
+    key: SeAuditPrivilege   
+  register: output
+
+- name: 2.2.31 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-19"
+      - "*S-1-5-20"
+
+- name: 2.2.31 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.31 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.31"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

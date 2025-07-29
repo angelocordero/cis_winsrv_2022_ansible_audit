@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.2 | Ensure 'Network access: Do not allow anonymous enumeration of SAM accounts' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Control\Lsa'
+    name: RestrictAnonymousSAM
+  register: output
+
+- name: "2.3.10.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

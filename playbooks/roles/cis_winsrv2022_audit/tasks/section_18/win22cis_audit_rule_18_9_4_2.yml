@@ -1,0 +1,13 @@
+---
+- name: "18.9.4.2 | Ensure Remote host allows delegation of non-exportable credentials is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation
+    name: AllowProtectedCreds
+  register: output
+
+- name: "18.9.4.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.4.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

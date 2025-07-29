@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.12 | Ensure 'Network access: Shares that can be accessed anonymously' is set to 'None'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters'
+    name: NullSessionShares
+  register: output
+
+- name: "2.3.10.12 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.12"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '' else 'Not Compliant' }}"

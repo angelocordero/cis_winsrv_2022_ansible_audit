@@ -1,0 +1,13 @@
+---
+- name: "18.10.15.6 | Ensure Limit Diagnostic Log Collection is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection
+    name: LimitDiagnosticLogCollection
+  register: output
+
+- name: "18.10.15.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.15.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

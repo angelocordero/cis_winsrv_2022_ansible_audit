@@ -1,0 +1,13 @@
+---
+- name: "2.3.17.7 | Ensure 'User Account Control: Switch to the secure desktop when prompting for elevation' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System'
+    name: PromptOnSecureDesktop
+  register: output
+
+- name: "2.3.17.7 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.17.7"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

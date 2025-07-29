@@ -1,0 +1,13 @@
+---
+- name: "9.3.6 | Ensure 'Windows Firewall: Public: Settings: Apply local connection security rules' is set to 'No'"
+  ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+      name: AllowLocalIPsecPolicyMerge
+  register: output
+
+- name: "9.3.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "9.3.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

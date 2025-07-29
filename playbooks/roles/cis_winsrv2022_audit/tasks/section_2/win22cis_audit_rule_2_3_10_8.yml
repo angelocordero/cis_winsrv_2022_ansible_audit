@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.8 | Configure 'Network access: Remotely accessible registry paths' is configured"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Control\Securepipeservers\Winreg\AllowedExactpaths'
+    name: "Machine"
+  register: output
+
+- name: "2.3.10.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == ['System\\CurrentControlSet\\Control\\ProductOptions', 'System\\CurrentControlSet\\Control\\Server Applications', 'Software\\Microsoft\\Windows NT\\CurrentVersion'] else 'Not Compliant' }}"

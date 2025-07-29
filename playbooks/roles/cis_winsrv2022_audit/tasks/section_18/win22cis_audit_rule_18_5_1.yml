@@ -1,0 +1,13 @@
+---
+- name: "18.5.1 | Ensure MSS AutoAdminLogon Enable Automatic Logon not recommended is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows Nt\Currentversion\Winlogon
+    name: AutoAdminLogon
+  register: output
+
+- name: "18.5.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

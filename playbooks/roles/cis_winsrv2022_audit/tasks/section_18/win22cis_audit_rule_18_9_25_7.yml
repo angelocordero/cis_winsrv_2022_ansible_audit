@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.7 | 'Post-authentication actions: Grace period (hours)' is set to 'Enabled: 8 or fewer hours, but not 0'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\LAPS
+    name: PostauthenticationResetDelay
+  register: output
+
+- name: "18.9.25.7 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.7"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 8 else 'Not Compliant' }}"

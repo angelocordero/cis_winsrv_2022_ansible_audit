@@ -1,0 +1,13 @@
+---
+- name: "18.10.12.2 | Ensure Turn off cloud optimized content is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent
+    name: DisableCloudOptimizedContent
+  register: output
+
+- name: "18.10.12.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.12.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

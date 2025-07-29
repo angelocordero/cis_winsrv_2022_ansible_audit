@@ -1,0 +1,12 @@
+---
+- name: 1.2.2 | Ensure 'Account lockout threshold' is set to '5 or fewer invalid logon attempt(s), but not 0'
+  read_secpol:
+    key: LockoutBadCount
+  register: output 
+
+- name: "1.2.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.2.2"
+    compliance_status: "{{ 'Compliant' if output.value <= 5 and output.value > 0 else 'Not Compliant' }}"

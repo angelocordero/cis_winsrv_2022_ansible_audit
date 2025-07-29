@@ -1,0 +1,21 @@
+---
+- name: "18.10.92.4.1 | Ensure 'Manage preview builds' is set to 'Disabled'"
+  block:
+  - name: "18.10.92.4.1 | ManagePreviewBuilds"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate
+      name: ManagePreviewBuilds
+    register: output1
+
+  - name: "18.10.92.4.1 | ManagePreviewBuildsPolicyValue"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate
+      name: ManagePreviewBuildsPolicyValue
+    register: output2
+
+  - name: "18.10.92.4.1 | Log compliance status"
+    tags:
+      - log_compliance
+    set_fact:
+      section_number: "18.10.92.4.1"
+      compliance_status: "{{ 'Compliant' if output1.value is defined and output2.value is defined and output1.value == 1 and output2.value == 1 else 'Not Compliant' }}"

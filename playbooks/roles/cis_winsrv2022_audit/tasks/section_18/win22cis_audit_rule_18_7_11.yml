@@ -1,0 +1,13 @@
+---
+- name: "18.7.11 | Ensure Point and Print Restrictions"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+    name: UpdatePromptSettings
+  register: output
+
+- name: "18.7.11 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.7.11"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

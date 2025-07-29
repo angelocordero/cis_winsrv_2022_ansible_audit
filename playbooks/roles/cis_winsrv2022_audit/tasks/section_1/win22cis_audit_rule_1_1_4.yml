@@ -1,0 +1,12 @@
+---
+- name: 1.1.4 | Ensure 'Minimum password length' is set to '14 or more character(s)'
+  read_secpol:
+    key: MinimumPasswordLength
+  register: output 
+
+- name: "1.1.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.4"
+    compliance_status: "{{ 'Compliant' if output.value >= 14 else 'Not Compliant' }}"

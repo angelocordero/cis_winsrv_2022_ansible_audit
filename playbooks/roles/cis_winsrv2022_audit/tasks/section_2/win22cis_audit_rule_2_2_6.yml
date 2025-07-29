@@ -1,0 +1,23 @@
+---
+- name: 2.2.6 | Ensure 'Adjust memory quotas for a process' is set to 'Administrators, LOCAL SERVICE, NETWORK SERVICE'
+  read_secpol:
+    key: SeIncreaseQuotaPrivilege  
+  register: output
+
+- name: 2.2.6 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-19"
+      - "*S-1-5-20"
+      - "*S-1-5-32-544"
+
+- name: 2.2.6 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.6"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"

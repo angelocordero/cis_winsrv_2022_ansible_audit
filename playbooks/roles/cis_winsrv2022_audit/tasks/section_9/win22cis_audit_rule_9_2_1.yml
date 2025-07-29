@@ -1,0 +1,13 @@
+---
+- name: "9.2.1 | Ensure 'Windows Firewall: Private: Firewall state' is set to 'On (recommended)'"
+  ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile
+      name: EnableFirewall
+  register: output
+
+- name: "9.2.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "9.2.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

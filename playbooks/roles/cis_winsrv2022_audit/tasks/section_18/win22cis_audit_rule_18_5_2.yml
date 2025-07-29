@@ -1,0 +1,13 @@
+---
+- name: "18.5.2 | Ensure MSS DisableIPSourceRouting IPv6 IP source routing protection level protects against packet spoofing is set to Enabled Highest protection source routing is completely disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+    name: DisableIPSourceRouting
+  register: output
+
+- name: "18.5.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 2 else 'Not Compliant' }}"

@@ -1,0 +1,13 @@
+---
+- name: "18.10.88.2.1 | Ensure Allow Basic authentication is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\Winrm\Service
+    name: AllowBasic
+  register: output
+
+- name: "18.10.88.2.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.88.2.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

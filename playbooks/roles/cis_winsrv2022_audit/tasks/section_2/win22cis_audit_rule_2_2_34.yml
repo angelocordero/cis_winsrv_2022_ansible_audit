@@ -1,0 +1,24 @@
+---
+- name: 2.2.34 | Ensure 'Increase scheduling priority' is set to 'Administrators, Window Manager\Window Manager Group'
+  read_secpol:
+    key: SeIncreaseBasePriorityPrivilege   
+  register: output
+
+- name: 2.2.34 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-32-544"
+      - "*S-1-5-90-0"
+
+- name: 2.2.34 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.34 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.34"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

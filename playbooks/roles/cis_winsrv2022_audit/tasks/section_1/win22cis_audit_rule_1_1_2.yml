@@ -1,0 +1,12 @@
+---
+- name: 1.1.2 | Ensure 'Maximum password age' is set to '365 or fewer days, but not 0'
+  read_secpol:
+    key: MaximumPasswordAge
+  register: output 
+
+- name: "1.1.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.2"
+    compliance_status: "{{ 'Compliant' if output.value <= 365 and output.value > 0 else 'Not Compliant' }}"

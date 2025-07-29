@@ -1,0 +1,12 @@
+---
+- name: 1.1.5 | Ensure 'Password must meet complexity requirements' is set to 'Enabled'
+  read_secpol:
+    key: PasswordComplexity
+  register: output 
+
+- name: "1.1.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.5"
+    compliance_status: "{{ 'Compliant' if output.value == 1 else 'Not Compliant' }}"

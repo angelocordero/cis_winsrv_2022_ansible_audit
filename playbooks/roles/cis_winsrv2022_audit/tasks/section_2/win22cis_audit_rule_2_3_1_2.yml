@@ -1,0 +1,13 @@
+---
+- name: "2.3.1.2 | Ensure 'Accounts: Guest account status' is set to 'Disabled' (MS only)"
+  read_secpol:
+    key: EnableGuestAccount
+  register: output
+
+- name: "2.3.1.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.1.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"
+

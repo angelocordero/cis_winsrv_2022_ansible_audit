@@ -1,0 +1,13 @@
+---
+- name: "18.5.4 | Ensure MSS EnableICMPRedirect Allow ICMP redirects to override OSPF generated routes is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+    name: EnableICMPRedirect
+  register: output
+
+- name: "18.5.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

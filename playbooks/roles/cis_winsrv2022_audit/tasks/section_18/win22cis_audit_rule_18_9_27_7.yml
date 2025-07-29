@@ -1,0 +1,13 @@
+---
+- name: "18.9.27.7 | Ensure Turn on convenience PIN sign-in is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\System
+    name: AllowDomainPINLogon
+  register: output
+
+- name: "18.9.27.7 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.27.7"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

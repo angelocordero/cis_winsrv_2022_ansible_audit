@@ -1,0 +1,13 @@
+---
+- name: "2.3.17.8 | Ensure 'User Account Control: Virtualize file and registry write failures to per-user locations' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System'
+    name: EnableVirtualization
+  register: output
+
+- name: "2.3.17.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.17.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

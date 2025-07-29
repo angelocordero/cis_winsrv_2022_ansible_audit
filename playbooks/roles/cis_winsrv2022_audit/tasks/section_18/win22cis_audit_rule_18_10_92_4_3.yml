@@ -1,0 +1,21 @@
+---
+- name: "18.10.92.4.3 | Ensure Select when Quality Updates are received is set to Enabled 0 days"
+  block:
+  - name: "18.10.92.4.3 | DeferQualityUpdates"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate
+      name: DeferQualityUpdates
+    register: output1
+
+  - name: "18.10.92.4.3 | ManagePreviewBuildsPolicyValue"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate
+      name: DeferQualityUpdatesPeriodInDays
+    register: output2
+
+  - name: "18.10.92.4.3 | Log compliance status"
+    tags:
+      - log_compliance
+    set_fact:
+      section_number: "18.10.92.4.3"
+      compliance_status: "{{ 'Compliant' if output1.value is defined and output2.value is defined and output1.value == 1 and output2.value == 0 else 'Not Compliant' }}"

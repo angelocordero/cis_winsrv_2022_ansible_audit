@@ -1,0 +1,13 @@
+---
+- name: "18.10.56.3.9.4 | Ensure Require user authentication for remote connections by using Network Level Authentication is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows Nt\Terminal Services
+    name: UserAuthentication
+  register: output
+
+- name: "18.10.56.3.9.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.56.3.9.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

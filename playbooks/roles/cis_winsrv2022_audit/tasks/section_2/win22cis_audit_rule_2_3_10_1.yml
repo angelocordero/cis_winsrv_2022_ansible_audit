@@ -1,0 +1,12 @@
+---
+- name: "2.3.10.1 | Ensure 'Network access: Allow anonymous SID/Name translation' is set to 'Disabled'"
+  read_secpol:
+    key: LSAAnonymousNameLookup   
+  register: output
+
+- name: "2.3.10.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

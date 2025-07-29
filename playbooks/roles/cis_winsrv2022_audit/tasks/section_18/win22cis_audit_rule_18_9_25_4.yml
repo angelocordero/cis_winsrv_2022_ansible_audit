@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.4 | PATCH | Ensure Password Settings"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft Services\AdmPwd
+    name: PasswordComplexity
+  register: output
+
+- name: "18.9.25.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 4 else 'Not Compliant' }}"

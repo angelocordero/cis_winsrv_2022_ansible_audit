@@ -1,0 +1,13 @@
+---
+- name: "2.3.9.1 | Ensure 'Microsoft network server: Amount of idle time required before suspending session' is set to '15 or fewer minute(s)'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters'
+    name: AutoDisconnect
+  register: output
+
+- name: "2.3.9.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.9.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value <= 15 else 'Not Compliant' }}"

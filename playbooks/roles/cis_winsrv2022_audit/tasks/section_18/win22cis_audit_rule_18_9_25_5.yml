@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.5 | Ensure Password Settings Password Length is set to Enabled 15 or more MS only | Member Server"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft Services\AdmPwd
+    name: PasswordLength
+  register: output
+
+- name: "18.9.25.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value >= 15 else 'Not Compliant' }}"

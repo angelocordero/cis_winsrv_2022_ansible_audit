@@ -1,0 +1,13 @@
+---
+- name: "18.7.9 | Ensure Manage processing of Queue-specific files is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers
+    name: CopyFilesPolicy
+  register: output
+
+- name: "18.7.9 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.7.9"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

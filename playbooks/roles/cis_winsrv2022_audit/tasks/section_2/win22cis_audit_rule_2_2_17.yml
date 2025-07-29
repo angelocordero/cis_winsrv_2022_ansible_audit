@@ -1,0 +1,12 @@
+---
+- name: 2.2.17 | Ensure 'Create permanent shared objects' is set to 'No One'
+  read_secpol:
+    key: SeCreatePermanentPrivilege  
+  register: output  
+
+- name: "2.2.17 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.17"
+    compliance_status: "{{ 'Compliant' if output.value is not defined or output.value == 'VARIABLE IS NOT DEFINED!' else 'Not Compliant' }}"

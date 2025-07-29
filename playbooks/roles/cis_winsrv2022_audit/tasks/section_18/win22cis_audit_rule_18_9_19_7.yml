@@ -1,0 +1,13 @@
+---
+- name: "18.9.19.5 | Ensure Turn off background refresh of Group Policy is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System\DisableBkGndGroupPolicy
+    name: DisableBkGndGroupPolicy
+  register: output
+
+- name: "18.9.19.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.19.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

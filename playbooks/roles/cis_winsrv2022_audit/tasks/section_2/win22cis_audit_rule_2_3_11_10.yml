@@ -1,0 +1,13 @@
+---
+- name: "2.3.11.10 | Ensure 'Network security: Minimum session security for NTLM SSP based (including secure RPC) servers' is set to 'Require NTLMv2 session security, Require 128-bit encryption'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa\Msv1_0
+    name: NTLMMinServerSec
+  register: output
+
+- name: "2.3.11.10 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.11.10"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 537395200 else 'Not Compliant' }}"

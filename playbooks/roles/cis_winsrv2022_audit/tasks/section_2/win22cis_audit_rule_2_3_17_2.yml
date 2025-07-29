@@ -1,0 +1,13 @@
+---
+- name: "2.3.17.2 | Ensure 'User Account Control: Behavior of the elevation prompt for administrators in Admin Approval Mode' is set to 'Prompt for consent on the secure desktop' or higher"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System'
+    name: ConsentPromptBehaviorAdmin
+  register: output
+
+- name: "2.3.17.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.17.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 2 else 'Not Compliant' }}"

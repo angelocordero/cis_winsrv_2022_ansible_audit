@@ -1,0 +1,13 @@
+---
+- name: "2.3.13.1 | Ensure 'Shutdown: Allow system to be shut down without having to log on' is set to 'Disabled'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: ShutdownWithoutLogon
+  register: output
+
+- name: "2.3.13.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.13.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

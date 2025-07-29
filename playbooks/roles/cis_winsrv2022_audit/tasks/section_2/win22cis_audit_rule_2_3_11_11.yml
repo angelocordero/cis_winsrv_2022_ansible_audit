@@ -1,0 +1,13 @@
+---
+- name: "2.3.11.11 | Ensure 'Network security: Restrict NTLM: Audit Incoming NTLM Traffic' is set to 'Enable auditing for all accounts'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa\Msv1_0
+    name: AuditReceivingNTLMTraffic
+  register: output
+
+- name: "2.3.11.11 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.11.11"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 2 else 'Not Compliant' }}"

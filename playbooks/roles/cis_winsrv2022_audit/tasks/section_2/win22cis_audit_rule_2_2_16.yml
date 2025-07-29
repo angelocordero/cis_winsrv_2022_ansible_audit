@@ -1,0 +1,26 @@
+---
+- name: 2.2.16 | Ensure 'Create global objects' is set to 'Administrators, LOCAL SERVICE, NETWORK SERVICE, SERVICE'
+  read_secpol:
+    key: SeCreateGlobalPrivilege   
+  register: output
+
+- name: 2.2.16 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-6"
+      - "*S-1-5-19"
+      - "*S-1-5-20"
+      - "*S-1-5-32-544"
+
+- name: 2.2.16 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.16 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.16"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

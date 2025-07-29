@@ -1,0 +1,13 @@
+---
+- name: "9.2.8 | Ensure 'Windows Firewall: Private: Logging: Log successful connections' is set to 'Yes'"
+  ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging
+      name: LogSuccessfulConnections
+  register: output
+
+- name: "9.2.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "9.2.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

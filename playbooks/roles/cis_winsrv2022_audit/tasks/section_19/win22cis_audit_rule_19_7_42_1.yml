@@ -1,0 +1,19 @@
+---
+- name: "19.7.42.1 | Ensure Always install with elevated privileges is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKU:\{{ item }}\Software\Policies\Microsoft\Windows\Installer
+    name: AlwaysInstallElevated
+  loop: "{{ hku_loaded_list }}"
+  register: output
+
+- name: "19.7.42.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "19.7.42.1"
+    compliance_status: >-
+      {{
+        'Compliant'
+        if output.results | map(attribute='value') | select('equalto', 0) | list | length == output.results | length
+        else 'Not Compliant'
+      }}

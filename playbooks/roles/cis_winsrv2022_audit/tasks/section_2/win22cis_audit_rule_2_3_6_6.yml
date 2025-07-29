@@ -1,0 +1,13 @@
+---
+- name: "2.3.6.6 | Ensure 'Domain member: Require strong (Windows 2000 or later) session key' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Services\Netlogon\Parameters
+    name: RequireStrongKey
+  register: output
+
+- name: "2.3.6.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.6.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

@@ -1,0 +1,24 @@
+---
+- name: 2.2.10 | Ensure 'Allow log on through Remote Desktop Services' is set to 'Administrators, Remote Desktop Users'
+  read_secpol:
+    key: SeRemoteInteractiveLogonRight   
+  register: output
+
+- name: 2.2.10 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-32-544"
+      - "*S-1-5-32-555"
+
+- name: 2.2.10 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.10 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.10"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

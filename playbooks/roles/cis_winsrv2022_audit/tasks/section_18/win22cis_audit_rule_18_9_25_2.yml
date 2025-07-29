@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.2 | Ensure Configures LSASS to run as a protected process is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+    name: RunAsPPL
+  register: output
+
+- name: "18.9.25.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

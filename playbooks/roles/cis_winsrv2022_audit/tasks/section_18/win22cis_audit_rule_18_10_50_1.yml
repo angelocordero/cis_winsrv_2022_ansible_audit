@@ -1,0 +1,13 @@
+---
+- name: "18.10.50.1 | Ensure Prevent the usage of OneDrive for file storage is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\Onedrive
+    name: DisableFileSyncNGSC
+  register: output
+
+- name: "18.10.50.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.50.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

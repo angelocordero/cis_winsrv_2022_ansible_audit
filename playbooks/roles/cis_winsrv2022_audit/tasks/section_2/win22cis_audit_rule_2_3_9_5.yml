@@ -1,0 +1,13 @@
+---
+- name: "2.3.9.5 | Ensure 'Microsoft network server: Server SPN target name validation level' is set to 'Accept if provided by client' or higher"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Services\Lanmanworkstation\Parameters'
+    name: SMBServerNameHardeningLevel
+  register: output
+
+- name: "2.3.9.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.9.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

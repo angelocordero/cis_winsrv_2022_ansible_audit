@@ -1,0 +1,13 @@
+- name: "17.6.3 | Ensure Audit Other Object Access Events is set to Success and Failure"
+  community.windows.win_audit_policy_system:
+    subcategory: Other Object Access Events
+    audit_type: 
+  check_mode: True
+  register: output
+
+- name: "17.6.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "17.6.3"
+    compliance_status: "{{ 'Compliant' if output.current_audit_policy['other object access events'] == 'success and failure' else 'Not Compliant' }}"

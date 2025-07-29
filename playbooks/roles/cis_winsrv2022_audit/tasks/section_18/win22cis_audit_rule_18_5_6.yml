@@ -1,0 +1,13 @@
+---
+- name: "18.5.6 | Ensure MSS NoNameReleaseOnDemand Allow the computer to ignore NetBIOS name release requests except from WINS servers is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Services\Netbt\Parameters
+    name: NoNameReleaseOnDemand
+  register: output
+
+- name: "18.5.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

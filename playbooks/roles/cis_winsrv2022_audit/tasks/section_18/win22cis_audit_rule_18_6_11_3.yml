@@ -1,0 +1,13 @@
+---
+- name: "18.6.11.3 | Ensure Prohibit use of Internet Connection Sharing on your DNS domain network is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Network Connections
+    name: NC_ShowSharedAccessUI
+  register: output
+
+- name: "18.6.11.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.6.11.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

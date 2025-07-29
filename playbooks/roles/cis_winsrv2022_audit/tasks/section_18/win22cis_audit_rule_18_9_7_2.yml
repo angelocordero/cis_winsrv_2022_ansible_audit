@@ -1,0 +1,13 @@
+---
+- name: "18.9.7.2 | Ensure Prevent device metadata retrieval from the Internet is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata
+    name: PreventDeviceMetadataFromNetwork
+  register: output
+
+- name: "18.9.7.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.7.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

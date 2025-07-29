@@ -1,0 +1,13 @@
+---
+- name: "18.10.56.3.9.2 | Ensure Require secure RPC communication is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows Nt\Terminal Services
+    name: fEncryptRPCTraffic
+  register: output
+
+- name: "18.10.56.3.9.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.56.3.9.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

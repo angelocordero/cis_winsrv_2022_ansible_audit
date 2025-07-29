@@ -1,0 +1,24 @@
+---
+- name: 2.2.44 | Ensure 'Profile system performance' is set to 'Administrators, NT SERVICE\WdiServiceHost
+  read_secpol:
+    key: SeSystemProfilePrivilege   
+  register: output
+
+- name: 2.2.44 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-32-544"
+      - "*S-1-5-80-3139157870-2983391045-3678747466-658725712-1809340420"
+
+- name: 2.2.44 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.44 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.44"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

@@ -1,0 +1,12 @@
+---
+- name: 2.2.14 | Ensure 'Back up files and directories' is set to 'Administrators'
+  read_secpol:
+    key: SeCreatePagefilePrivilege   
+  register: output
+
+- name: "2.2.14 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.14"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '*S-1-5-32-544' else 'Not Compliant' }}"

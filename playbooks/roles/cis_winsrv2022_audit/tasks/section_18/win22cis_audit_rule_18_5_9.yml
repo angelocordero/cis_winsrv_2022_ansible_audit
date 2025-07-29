@@ -1,0 +1,13 @@
+---
+- name: "18.5.9 | Ensure 'MSS: (ScreenSaverGracePeriod) The time in seconds before the screen saver grace period expires' is set to 'Enabled: 5 or fewer seconds'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+    name: ScreenSaverGracePeriod
+  register: output
+
+- name: "Run Task | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.9"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 5 else 'Not Compliant' }}"

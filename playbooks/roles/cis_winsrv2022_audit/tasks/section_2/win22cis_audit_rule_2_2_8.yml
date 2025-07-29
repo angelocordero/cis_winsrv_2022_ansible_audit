@@ -1,0 +1,14 @@
+---
+- name: 2.2.8 | Ensure 'Allow log on locally' is set to 'Administrators'
+  read_secpol:
+    key: SeInteractiveLogonRight   
+  register: output
+
+- name: "2.2.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '*S-1-5-32-544' else 'Not Compliant' }}"
+
+    

@@ -1,0 +1,33 @@
+---
+- name: Check ansible version is greater than 2.10.7
+  fail:
+    msg: 'Please check ansible version on your deployment server (current: {{ ansible_version.full }}), ansible version 2.10.7 is required'
+  when: ansible_version.full is version('2.10.7', '<')
+    
+- name: Gather facts
+  ansible.builtin.setup:
+    gather_timeout: 30
+  
+- name: Check OS version and family
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == 'Windows'
+      - ansible_distribution | regex_search('(Microsoft Windows Server 2022)')
+    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is the detected operating system."
+    fail_msg: "This role can only be run against Windows Server 2022 Editions. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+  tags:
+    - always
+
+# - name: Get Windows installation type
+#   ansible.windows.win_reg_stat:
+#     path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+#     name: InstallationType
+#   register: get_windows_installation_type
+#   tags:
+#     - always
+
+# - name: Set Windows installation type
+#   ansible.builtin.set_fact:
+#     windows_installation_type: "{{ get_windows_installation_type.value | default('') }}"
+#   tags:
+#     - always

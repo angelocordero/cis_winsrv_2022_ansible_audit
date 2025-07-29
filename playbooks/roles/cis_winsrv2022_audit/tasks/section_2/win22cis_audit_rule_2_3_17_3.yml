@@ -1,0 +1,13 @@
+---
+- name: "2.3.17.3 | Ensure 'User Account Control: Behavior of the elevation prompt for standard users' is set to 'Automatically deny elevation requests'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System'
+    name: ConsentPromptBehaviorUser
+  register: output
+
+- name: "2.3.17.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.17.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

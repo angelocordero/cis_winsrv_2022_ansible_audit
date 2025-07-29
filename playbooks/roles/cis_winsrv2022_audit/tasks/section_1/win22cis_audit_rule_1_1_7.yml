@@ -1,0 +1,12 @@
+---
+- name: 1.1.7 | Ensure 'Store passwords using reversible encryption' is set to 'Disabled'
+  read_secpol:
+    key: ClearTextPassword
+  register: output 
+
+- name: "1.1.7 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.7"
+    compliance_status: "{{ 'Compliant' if output.value == 0 else 'Not Compliant' }}"

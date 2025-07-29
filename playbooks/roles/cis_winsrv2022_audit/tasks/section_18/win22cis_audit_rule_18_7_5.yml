@@ -1,0 +1,13 @@
+---
+- name: "18.7.5 | Ensure Configure RPC connection settings Use authentication for outgoing RPC connections is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows NT\Printers\RPC
+    name: RpcProtocols
+  register: output
+
+- name: "18.7.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.7.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 5 else 'Not Compliant' }}"

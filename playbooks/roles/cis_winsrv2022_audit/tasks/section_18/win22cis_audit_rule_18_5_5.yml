@@ -1,0 +1,13 @@
+---
+- name: "18.5.5 | Ensure MSS KeepAliveTime How often keep-alive packets are sent in milliseconds is set to Enabled 300000 or 5 minutes recommended"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+    name: KeepAliveTime
+  register: output
+
+- name: "18.5.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.5.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 300000 else 'Not Compliant' }}"

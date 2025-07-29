@@ -1,0 +1,19 @@
+---
+- name: "19.7.5.1 | Ensure Do not preserve zone information in file attachments is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKU:\{{ item }}\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments
+    name: SaveZoneInformation
+  loop: "{{ hku_loaded_list }}"
+  register: output
+
+- name: "19.7.5.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "19.7.5.1"
+    compliance_status: >-
+      {{
+        'Compliant'
+        if output.results | map(attribute='value') | select('equalto', 2) | list | length == output.results | length
+        else 'Not Compliant'
+      }}

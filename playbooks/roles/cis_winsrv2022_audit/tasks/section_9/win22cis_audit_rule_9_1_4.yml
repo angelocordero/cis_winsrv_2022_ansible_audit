@@ -1,0 +1,13 @@
+---
+- name: "9.1.4 | Ensure 'Windows Firewall: Domain: Settings: Display a notification' is set to 'No'"
+  ansible.windows.win_reg_stat:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile
+      name: DisableNotifications
+  register: output
+
+- name: "9.1.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "9.1.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

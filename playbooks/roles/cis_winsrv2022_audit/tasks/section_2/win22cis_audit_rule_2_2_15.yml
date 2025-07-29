@@ -1,0 +1,12 @@
+---
+- name: 2.2.15 | Ensure 'Create a token object' is set to 'No One'
+  read_secpol:
+    key: SeCreateTokenPrivilege  
+  register: output  
+
+- name: "2.2.15 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.15"
+    compliance_status: "{{ 'Compliant' if output.value is not defined or output.value == 'VARIABLE IS NOT DEFINED!' else 'Not Compliant' }}"

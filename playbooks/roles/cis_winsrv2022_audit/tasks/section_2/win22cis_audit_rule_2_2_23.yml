@@ -1,0 +1,14 @@
+---
+- name: 2.2.23 | Ensure 'Deny log on as a batch job' to include 'Guests'
+  read_secpol:
+    key: SeDenyBatchLogonRight   
+  register: output
+
+- name: "2.2.23 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.23"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '*S-1-5-32-546' else 'Not Compliant' }}"
+
+    

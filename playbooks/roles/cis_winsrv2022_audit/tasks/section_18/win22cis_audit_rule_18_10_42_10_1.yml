@@ -1,0 +1,13 @@
+---
+- name: "18.10.42.10.1 | Ensure Scan all downloaded files and attachments is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableIOAVProtection
+  register: output
+
+- name: "18.10.42.10.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.42.10.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

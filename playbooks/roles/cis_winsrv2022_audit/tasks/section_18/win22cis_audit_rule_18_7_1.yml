@@ -1,0 +1,13 @@
+---
+- name: "18.7.1 | Ensure Allow Print Spooler to accept client connections is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows NT\Printers
+    name: RegisterSpoolerRemoteRpcEndPoint
+  register: output
+
+- name: "18.7.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.7.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 2 else 'Not Compliant' }}"

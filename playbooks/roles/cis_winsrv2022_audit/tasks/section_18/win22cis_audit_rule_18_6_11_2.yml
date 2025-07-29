@@ -1,0 +1,13 @@
+---
+- name: "18.6.11.2 | Ensure Prohibit installation and configuration of Network Bridge on your DNS domain network is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\Network Connections
+    name: NC_AllowNetBridge_NLA
+  register: output
+
+- name: "18.6.11.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.6.11.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

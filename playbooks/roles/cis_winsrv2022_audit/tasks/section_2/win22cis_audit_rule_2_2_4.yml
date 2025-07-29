@@ -1,0 +1,12 @@
+---
+- name: 2.2.4 | Ensure 'Act as part of the operating system' is set to 'No One'
+  read_secpol:
+    key: SeTcbPrivilege  
+  register: output  
+
+- name: "2.2.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.4"
+    compliance_status: "{{ 'Compliant' if output.value is not defined or output.value == 'VARIABLE IS NOT DEFINED!' else 'Not Compliant' }}"

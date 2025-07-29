@@ -1,0 +1,22 @@
+---
+- name: 2.2.3 | Ensure 'Access this computer from the network' is set to 'Administrators, Authenticated Users'
+  read_secpol:
+    key: SeNetworkLogonRight  
+  register: output 
+
+- name: 2.2.3 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-11"
+      - "*S-1-5-32-544"
+
+- name: 2.2.3 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.3"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"

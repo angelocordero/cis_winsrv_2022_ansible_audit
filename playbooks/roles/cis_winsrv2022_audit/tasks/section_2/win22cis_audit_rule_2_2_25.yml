@@ -1,0 +1,14 @@
+---
+- name: 2.2.25 | Ensure 'Deny log on locally' to include 'Guests'
+  read_secpol:
+    key: SeDenyInteractiveLogonRight   
+  register: output
+
+- name: "2.2.25 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.25"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '*S-1-5-32-546' else 'Not Compliant' }}"
+
+    

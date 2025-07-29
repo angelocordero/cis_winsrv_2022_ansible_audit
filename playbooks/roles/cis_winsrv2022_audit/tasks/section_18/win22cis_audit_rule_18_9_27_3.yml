@@ -1,0 +1,13 @@
+---
+- name: "18.9.27.3 | Ensure Do not enumerate connected users on domain-joined computers is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\System
+    name: DontEnumerateConnectedUsers
+  register: output
+
+- name: "18.9.27.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.27.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.10 | Ensure 'Network access: Restrict anonymous access to Named Pipes and Shares' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters'
+    name: RestrictNullSessAccess
+  register: output
+
+- name: "2.3.10.10 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.10"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

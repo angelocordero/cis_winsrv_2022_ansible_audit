@@ -1,0 +1,13 @@
+---
+- name: "9.3.8 | Ensure 'Windows Firewall: Public: Logging: Size limit (KB)' is set to '16,384 KB or greater'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging'
+    name: LogFileSize
+  register: output
+
+- name: "9.3.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "9.3.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value >= 16384 else 'Not Compliant' }}"

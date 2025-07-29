@@ -1,0 +1,14 @@
+---
+- name: 2.2.1 | Ensure 'Access Credential Manager as a trusted caller' is set to 'No One'
+  read_secpol:
+    key: SeTrustedCredManAccessPrivilege  
+  register: output  
+
+- name: "2.2.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.1"
+    compliance_status: "{{ 'Compliant' if output.value is not defined or output.value == 'VARIABLE IS NOT DEFINED!' else 'Not Compliant' }}"
+
+

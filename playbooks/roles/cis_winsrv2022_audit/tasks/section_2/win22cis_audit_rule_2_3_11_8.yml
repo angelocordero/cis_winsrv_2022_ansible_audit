@@ -1,0 +1,13 @@
+---
+- name: "2.3.11.8 | Ensure 'Network security: LDAP client signing requirements' is set to 'Negotiate signing' or higher'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Services\Ldap
+    name: LDAPClientIntegrity
+  register: output
+
+- name: "2.3.11.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.11.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.13 | Ensure 'Network access: Sharing and security model for local accounts' is set to 'Classic - local users authenticate as themselves'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: ForceGuest
+  register: output
+
+- name: "2.3.10.13 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.13"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

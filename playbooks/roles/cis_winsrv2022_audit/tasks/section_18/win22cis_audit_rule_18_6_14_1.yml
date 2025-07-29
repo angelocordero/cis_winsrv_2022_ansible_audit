@@ -1,0 +1,21 @@
+---
+- name: "18.6.14.1 | Ensure Hardened UNC Paths is set to Enabled with Require Mutual Authentication and Require Integrity set for all NETLOGON and SYSVOL shares"
+  block:
+  - name: "18.6.14.1 | NETLOGON"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\Software\Policies\Microsoft\Windows\Networkprovider\Hardenedpaths
+      name: "\\\\*\\NETLOGON"
+    register: output1
+
+  - name: "18.6.14.1 | SYSVOL"
+    ansible.windows.win_reg_stat:
+      path: HKLM:\Software\Policies\Microsoft\Windows\Networkprovider\Hardenedpaths
+      name: "\\\\*\\SYSVOL"
+    register: output2
+
+  - name: "18.6.14.1 | Log compliance status"
+    tags:
+      - log_compliance
+    set_fact:
+      section_number: "18.6.14.1"
+      compliance_status: "{{ 'Compliant' if output1.value is defined and output2.value is defined and output1.value == 'RequireMutualAuthentication=1, RequireIntegrity=1' and output2.value == 'RequireMutualAuthentication=1, RequireIntegrity=1' else 'Not Compliant' }}"

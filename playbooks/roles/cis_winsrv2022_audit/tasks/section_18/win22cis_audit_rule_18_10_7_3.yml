@@ -1,0 +1,13 @@
+---
+- name: "18.10.7.3 | Ensure Turn off Autoplay is set to Enabled All drives"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\Explorer
+    name: NoDriveTypeAutoRun
+  register: output
+
+- name: "18.10.7.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.7.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 255 else 'Not Compliant' }}"

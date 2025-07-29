@@ -1,0 +1,24 @@
+---
+- name: 2.2.19 | Ensure 'Create symbolic links' is set to 'Administrators, NT VIRTUAL MACHINE\Virtual Machines'
+  read_secpol:
+    key: SeCreateSymbolicLinkPrivilege   
+  register: output
+
+- name: 2.2.19 | Check if Hyper-V is installed
+  win_shell: Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "Microsoft-Hyper-V-All" } | Select-Object -ExpandProperty State
+  register: hyperv_status
+
+- name: 2.2.19 | Set valid SIDs based on Hyper-V status
+  set_fact:
+    valid_sids: "{{ ['*S-1-5-32-544'] if hyperv_status.stdout == '' else ['*S-1-5-83-0', '*S-1-5-32-544'] }}"
+
+- name: 2.2.19 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.19 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.19"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"

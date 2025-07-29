@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.8 | Ensure 'Post-authentication actions: Actions' is set to 'Enabled: Reset the password and logoff the managed account' or higher"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\LAPS
+    name: PostAuthenticationActions
+  register: output
+
+- name: "18.9.25.8 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.8"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 8 else 'Not Compliant' }}"

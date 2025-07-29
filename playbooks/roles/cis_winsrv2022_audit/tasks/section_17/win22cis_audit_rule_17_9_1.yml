@@ -1,0 +1,13 @@
+- name: "17.9.1 | Ensure Audit IPsec Driver is set to Success and Failure"
+  ansible.windows.win_shell: AuditPol /get /subcategory:"IPsec Driver" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: output
+
+- name: "17.9.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "17.9.1"
+    compliance_status: "{{ 'Compliant' if 'Success' in output.stdout and 'Failure' in output.stdout else 'Not Compliant' }}"

@@ -1,0 +1,24 @@
+---
+- name: 2.2.45 | Ensure 'Replace a process level token' is set to 'LOCAL SERVICE, NETWORK SERVICE'
+  read_secpol:
+    key: SeAssignPrimaryTokenPrivilege   
+  register: output
+
+- name: 2.2.45 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-19"
+      - "*S-1-5-20"
+
+- name: 2.2.45 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.45 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.45"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

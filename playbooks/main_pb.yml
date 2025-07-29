@@ -1,0 +1,13 @@
+---
+- name: CIS Windows Server 2022 Audit
+  hosts: all
+  gather_facts: false
+  # pre_tasks:
+  #   - name: Pre tasks
+  #     include_tasks: tasks/pre_tasks.yml
+  tasks:
+    - name: include roles
+      include_role:
+        name: cis_winsrv2022_audit
+
+

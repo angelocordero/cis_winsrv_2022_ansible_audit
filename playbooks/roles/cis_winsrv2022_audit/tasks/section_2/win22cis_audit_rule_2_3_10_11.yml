@@ -1,0 +1,13 @@
+---
+- name: "2.3.10.11 | Ensure 'Network access: Restrict clients allowed to make remote calls to SAM' is set to 'Administrators: Remote Access: Allow'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\CurrentControlSet\Control\Lsa'
+    name: RestrictRemoteSAM
+  register: output
+
+- name: "2.3.10.11 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.10.11"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 'O:BAG:BAD:(A;;RC;;;BA)' else 'Not Compliant' }}"

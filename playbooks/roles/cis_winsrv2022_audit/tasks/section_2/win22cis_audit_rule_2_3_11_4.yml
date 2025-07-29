@@ -1,0 +1,13 @@
+---
+- name: "2.3.11.4 | Ensure 'Network security: Configure encryption types allowed for Kerberos' is set to 'AES128_HMAC_SHA1, AES256_HMAC_SHA1, Future encryption types'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System\Kerberos\Parameters
+    name: SupportedEncryptionTypes
+  register: output
+
+- name: "2.3.11.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.11.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 2147483640 else 'Not Compliant' }}"

@@ -1,0 +1,13 @@
+---
+- name: "2.3.15.2 | Ensure 'System objects: Strengthen default permissions of internal system objects (e.g. Symbolic Links)' is set to 'Enabled'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\System\Currentcontrolset\Control\Session Manager'
+    name: ProtectionMode
+  register: output
+
+- name: "2.3.15.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.15.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

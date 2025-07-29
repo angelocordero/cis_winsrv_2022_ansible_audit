@@ -1,0 +1,19 @@
+---
+- name: "19.7.5.2 | Ensure Notify antivirus programs when opening attachments is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKU:\{{ item }}\Software\Microsoft\Windows\Currentversion\Policies\Attachments
+    name: ScanWithAntiVirus
+  loop: "{{ hku_loaded_list }}"
+  register: output
+
+- name: "19.7.5.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "19.7.5.2"
+    compliance_status: >-
+      {{
+        'Compliant'
+        if output.results | map(attribute='value') | select('equalto', 3) | list | length == output.results | length
+        else 'Not Compliant'
+      }}

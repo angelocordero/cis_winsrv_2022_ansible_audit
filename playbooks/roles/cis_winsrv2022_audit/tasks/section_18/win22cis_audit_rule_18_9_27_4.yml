@@ -1,0 +1,13 @@
+---
+- name: "18.9.27.4 | Ensure Enumerate local users on domain-joined computers is set to Disabled MS only | Member Server"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\System
+    name: EnumerateLocalUsers
+  register: output
+
+- name: "18.9.27.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.27.4"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

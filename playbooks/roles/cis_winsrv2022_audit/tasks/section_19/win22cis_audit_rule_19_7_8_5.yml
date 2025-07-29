@@ -1,0 +1,19 @@
+---
+- name: "19.7.8.5 | Ensure Turn off Spotlight collection on Desktop is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKU:\{{ item }}\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableSpotlightCollectionOnDesktop
+  loop: "{{ hku_loaded_list }}"
+  register: output
+
+- name: "19.7.8.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "19.7.8.5"
+    compliance_status: >-
+      {{
+        'Compliant'
+        if output.results | map(attribute='value') | select('equalto', 1) | list | length == output.results | length
+        else 'Not Compliant'
+      }}

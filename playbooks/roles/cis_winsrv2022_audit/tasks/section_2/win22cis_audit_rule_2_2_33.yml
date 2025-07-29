@@ -1,0 +1,27 @@
+---
+- name: 2.2.33 | Ensure 'Impersonate a client after authentication' is set to 'Administrators, LOCAL SERVICE, NETWORK SERVICE, SERVICE' and (when the Web Server (IIS) Role with Web Services Role Service is installed) 'IIS_IUSRS'
+  read_secpol:
+    key: SeImpersonatePrivilege   
+  register: output
+
+- name: 2.2.33 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-6"
+      - "*S-1-5-19"
+      - "*S-1-5-20"
+      - "*S-1-5-32-544"
+      - "*S-1-5-32-568"
+
+- name: 2.2.33 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ output.value.split(',') | sort }}"
+
+- name: "2.2.33 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.33"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

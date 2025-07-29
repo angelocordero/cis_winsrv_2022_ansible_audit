@@ -1,0 +1,13 @@
+---
+- name: 1.1.6 | Ensure 'Relax minimum password length limits' is set to 'Enabled'
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\SAM
+    name: RelaxMinimumPasswordLengthLimits
+  register: output
+
+- name: "1.1.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

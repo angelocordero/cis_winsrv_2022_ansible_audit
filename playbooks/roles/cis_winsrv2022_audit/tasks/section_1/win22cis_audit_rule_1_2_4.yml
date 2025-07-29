@@ -1,0 +1,12 @@
+---
+- name: 1.2.4 | Ensure 'Reset account lockout counter after' is set to '15 or more minute(s)'
+  read_secpol:
+    key: ResetLockoutCount
+  register: output 
+
+- name: "1.2.4 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.2.4"
+    compliance_status: "{{ 'Compliant' if output.value >= 15 else 'Not Compliant' }}"

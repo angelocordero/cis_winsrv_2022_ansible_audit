@@ -1,0 +1,13 @@
+---
+- name: "18.10.81.2 | Ensure Sign-in last interactive user automatically after a system-initiated restart is set to Disabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: DisableAutomaticRestartSignOn
+  register: output
+
+- name: "18.10.81.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.81.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

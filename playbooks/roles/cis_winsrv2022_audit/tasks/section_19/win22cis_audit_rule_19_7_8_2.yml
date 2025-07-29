@@ -1,0 +1,19 @@
+---
+- name: "19.7.8.2 | Ensure Do not suggest third-party content in Windows spotlight is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKU:\{{ item }}\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableThirdPartySuggestions
+  loop: "{{ hku_loaded_list }}"
+  register: output
+
+- name: "19.7.8.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "19.7.8.2"
+    compliance_status: >-
+      {{
+        'Compliant'
+        if output.results | map(attribute='value') | select('equalto', 1) | list | length == output.results | length
+        else 'Not Compliant'
+      }}

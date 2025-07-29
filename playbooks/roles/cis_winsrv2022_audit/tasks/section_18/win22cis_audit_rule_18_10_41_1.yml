@@ -1,0 +1,13 @@
+---
+- name: "18.10.41.1 | Ensure Block all consumer Microsoft account user authentication is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\MicrosoftAccount
+    name: DisableUserAuth
+  register: output
+
+- name: "18.10.41.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.41.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

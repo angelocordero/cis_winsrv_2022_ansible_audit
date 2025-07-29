@@ -1,0 +1,13 @@
+---
+- name: "18.6.21.1 | Ensure Minimize the number of simultaneous connections to the Internet or a Windows Domain is set to Enabled"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\Wcmsvc\Grouppolicy
+    name: fMinimizeConnections
+  register: output
+
+- name: "18.6.21.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.6.21.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 3 else 'Not Compliant' }}"

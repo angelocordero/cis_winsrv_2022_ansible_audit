@@ -1,0 +1,13 @@
+---
+- name: "2.3.1.1 | Ensure 'Accounts: Guest account status' is set to 'Disabled'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: NoConnectedUser
+  register: output
+
+- name: "2.3.1.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.1.1"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 3 else 'Not Compliant' }}"

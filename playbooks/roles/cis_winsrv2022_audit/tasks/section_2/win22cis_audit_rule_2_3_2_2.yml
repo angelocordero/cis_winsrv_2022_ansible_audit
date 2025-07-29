@@ -1,0 +1,13 @@
+---
+- name: "2.3.2.2 | Ensure 'Audit: Shut down system immediately if unable to log security audits' is set to 'Disabled'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\System\CurrentControlSet\Control\Lsa
+    name: CrashOnAuditFail
+  register: output
+
+- name: "2.3.2.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.2.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

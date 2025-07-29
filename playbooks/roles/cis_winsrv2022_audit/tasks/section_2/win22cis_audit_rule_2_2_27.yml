@@ -1,0 +1,24 @@
+---
+- name: 2.2.27 | Ensure 'Create global objects' is set to 'Administrators, LOCAL SERVICE, NETWORK SERVICE, SERVICE'
+  read_secpol:
+    key: SeDenyRemoteInteractiveLogonRight   
+  register: output
+
+- name: 2.2.27 | Set valid SIDs
+  set_fact:
+    valid_sids:
+      - "*S-1-5-113"
+      - "*S-1-5-32-546"
+
+- name: 2.2.27 | Extract all SIDs from the string
+  set_fact:
+    extracted_sids: "{{ (output.value | default('')).split(',') | sort }}"
+
+- name: "2.2.27 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.27"
+    compliance_status: "{{ 'Compliant' if extracted_sids == (valid_sids | sort) else 'Not Compliant' }}"
+
+    

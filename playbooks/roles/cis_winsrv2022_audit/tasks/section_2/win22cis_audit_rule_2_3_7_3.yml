@@ -1,0 +1,13 @@
+---
+- name: "2.3.7.3 | Ensure 'Interactive logon: Machine inactivity limit' is set to '900 or fewer second(s), but not 0'"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: InactivityTimeoutSecs
+  register: output
+
+- name: "2.3.7.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.7.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value > 0 and output.value <= 900 else 'Not Compliant' }}"

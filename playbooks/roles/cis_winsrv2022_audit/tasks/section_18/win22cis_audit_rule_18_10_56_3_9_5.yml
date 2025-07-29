@@ -1,0 +1,13 @@
+---
+- name: "18.10.56.3.9.5 | Ensure Set client connection encryption level is set to Enabled High Level"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows Nt\Terminal Services
+    name: MinEncryptionLevel
+  register: output
+
+- name: "18.10.56.3.9.5 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.56.3.9.5"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 3 else 'Not Compliant' }}"

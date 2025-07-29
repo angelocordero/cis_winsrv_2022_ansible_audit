@@ -1,0 +1,14 @@
+---
+- name: 2.2.22 | Ensure 'Deny access to this computer from the network' to include 'Guests, Local account and member of Administrators group'
+  read_secpol:
+    key: SeDenyNetworkLogonRight   
+  register: output
+
+- name: "2.2.22 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.2.22"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '*S-1-5-32-546' else 'Not Compliant' }}"
+
+    

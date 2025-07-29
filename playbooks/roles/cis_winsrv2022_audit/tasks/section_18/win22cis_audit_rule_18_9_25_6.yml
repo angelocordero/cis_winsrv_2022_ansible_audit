@@ -1,0 +1,13 @@
+---
+- name: "18.9.25.6 | Ensure Password Settings Password Age Days is set to Enabled 30 or fewer MS only | Member Server"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SOFTWARE\Policies\Microsoft Services\AdmPwd
+    name: PasswordAgeDays
+  register: output
+
+- name: "18.9.25.6 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.9.25.6"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value <= 30 else 'Not Compliant' }}"

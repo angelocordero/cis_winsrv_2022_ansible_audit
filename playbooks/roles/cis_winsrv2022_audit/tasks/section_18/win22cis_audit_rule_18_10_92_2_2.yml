@@ -1,0 +1,13 @@
+---
+- name: "18.10.92.2.2 | Ensure Configure Automatic Updates Scheduled install day is set to 0 - Every day"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\Software\Policies\Microsoft\Windows\Windowsupdate\Au
+    name: ScheduledInstallDay
+  register: output
+
+- name: "18.10.92.2.2 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.10.92.2.2"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

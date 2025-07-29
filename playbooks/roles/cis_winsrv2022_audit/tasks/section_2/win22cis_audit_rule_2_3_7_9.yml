@@ -1,0 +1,13 @@
+---
+- name: "2.3.7.9 | Ensure 'Interactive logon: Smart card removal behavior' is set to 'Lock Workstation' or higher"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows Nt\Currentversion\Winlogon'
+    name: ScRemoveOption
+  register: output
+
+- name: "2.3.7.9 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.7.9"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"

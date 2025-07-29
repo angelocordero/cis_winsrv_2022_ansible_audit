@@ -1,0 +1,13 @@
+---
+- name: "2.3.7.7 | Ensure 'Interactive logon: Prompt user to change password before expiration' is set to 'between 5 and 14 days'"
+  ansible.windows.win_reg_stat:
+    path: 'HKLM:\Software\Microsoft\Windows Nt\Currentversion\Winlogon'
+    name: PasswordExpiryWarning
+  register: output
+
+- name: "2.3.7.7 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "2.3.7.7"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value > 5 and output.value < 14 else 'Not Compliant' }}"

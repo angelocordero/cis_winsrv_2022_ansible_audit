@@ -1,0 +1,13 @@
+---
+- name: "18.4.3 | Ensure Configure SMB v1 client driver is set to Enabled Disable driver recommended"
+  ansible.windows.win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\mrxsmb10
+    name: Start
+  register: output
+
+- name: "18.4.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "18.4.3"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 4 else 'Not Compliant' }}"

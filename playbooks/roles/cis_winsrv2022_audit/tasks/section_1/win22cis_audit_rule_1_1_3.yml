@@ -1,0 +1,12 @@
+---
+- name: 1.1.3 | Ensure 'Minimum password age' is set to '1 or more day(s)'
+  read_secpol:
+    key: MinimumPasswordAge
+  register: output 
+
+- name: "1.1.3 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "1.1.3"
+    compliance_status: "{{ 'Compliant' if output.value >= 1 else 'Not Compliant' }}"

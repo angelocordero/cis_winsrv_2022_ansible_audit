@@ -1,0 +1,13 @@
+- name: "17.3.1 | Ensure Audit PNP Activity is set to include Success"
+  ansible.windows.win_shell: AuditPol /get /subcategory:"Plug and Play Events" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: output
+
+- name: "17.3.1 | Log compliance status"
+  tags:
+    - log_compliance
+  set_fact:
+    section_number: "17.3.1"
+    compliance_status: "{{ 'Compliant' if 'Success' in output.stdout else 'Not Compliant' }}"

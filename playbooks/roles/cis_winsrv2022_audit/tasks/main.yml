@@ -1,0 +1,39 @@
+---
+- name: Include CIS Windows Server 2022 Audit Prelim tasks
+  include_tasks: prelim.yml
+
+# - name: Include CIS Windows Server 2022 Audit Section 1 tasks
+#   include_tasks: "{{ sec_1_tasks }}"
+#   loop: "{{ lookup('fileglob', 'section_1/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+#   loop_control:
+#     loop_var: sec_1_tasks
+
+# - name: Include CIS Windows Server 2022 Audit Section 2 tasks
+#   include_tasks: "{{ sec_2_tasks }}"
+#   loop: "{{ lookup('fileglob', 'section_2/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+#   loop_control:
+#     loop_var: sec_2_tasks
+
+# - name: Include CIS Windows Server 2022 Audit Section 9 tasks
+#   include_tasks: "{{ sec_9_tasks }}"
+#   loop: "{{ lookup('fileglob', 'section_9/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+#   loop_control:
+#     loop_var: sec_9_tasks
+
+# - name: Include CIS Windows Server 2022 Audit Section 17 tasks
+#   include_tasks: "{{ sec_17_tasks }}"
+#   loop: "{{ lookup('fileglob', 'section_17/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+#   loop_control:
+#     loop_var: sec_17_tasks
+
+# - name: Include CIS Windows Server 2022 Audit Section 18 tasks
+#   include_tasks: "{{ sec_18_tasks }}"
+#   loop: "{{ lookup('fileglob', 'section_18/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+#   loop_control:
+#     loop_var: sec_18_tasks
+
+- name: Include CIS Windows Server 2022 Audit Section 19 tasks
+  include_tasks: "{{ sec_19_tasks }}"
+  loop: "{{ lookup('fileglob', 'section_19/win22cis_audit_rule_*.yml', wantlist=True) | sort_cis_rules }}"
+  loop_control:
+    loop_var: sec_19_tasks
