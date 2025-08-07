@@ -2,7 +2,7 @@
 - name: "18.9.25.3 | Ensure 'Enable password encryption' is set to 'Enabled'"
   ansible.windows.win_reg_stat:
     path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\LAPS
-    name: 
+    name: ADPasswordEncryptionEnabled
   register: output
 
 - name: "Run Task | Log compliance status"

@@ -10,4 +10,4 @@
     - log_compliance
   set_fact:
     section_number: "2.3.7.9"
-    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '1' else 'Not Compliant' }}"

@@ -49,7 +49,7 @@ try {
         $intValue = $Value -as [int]
         @{
             changed = $true
-            value   = if ($null -eq $intValue) { $Value } else { [int]$ParsedInt }
+            value   = if ($null -eq $intValue) { $Value } else { [int]$intValue }
         }
     } else {
         @{

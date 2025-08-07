@@ -1,13 +1,13 @@
 ---
-- name: "18.9.51.2 | PATCH | Ensure Enable Windows NTP Server is set to Disabled MS only | Member Server"
+- name: "18.9.51.1.2 | PATCH | Ensure Enable Windows NTP Server is set to Disabled MS only | Member Server"
   ansible.windows.win_reg_stat:
     path: HKLM:\Software\Policies\Microsoft\W32Time\Timeproviders\Ntpserver
     name: Enabled
   register: output
 
-- name: "18.9.51.2 | Log compliance status"
+- name: "18.9.51.1.2 | Log compliance status"
   tags:
     - log_compliance
   set_fact:
-    section_number: "18.9.51.2"
+    section_number: "18.9.51.1.2"
     compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 0 else 'Not Compliant' }}"

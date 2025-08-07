@@ -1,7 +1,7 @@
 ---
 - name: "2.3.9.4 | Ensure 'Microsoft network server: Disconnect clients when logon hours expire' is set to 'Enabled'"
   ansible.windows.win_reg_stat:
-    path: 'HKLM:\System\Currentcontrolset\Services\Lanmanworkstation\Parameters'
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanworkstation\Parameters
     name: EnableForcedLogoff
   register: output
 
@@ -10,4 +10,4 @@
     - log_compliance
   set_fact:
     section_number: "2.3.9.4"
-    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == 1 else 'Not Compliant' }}"
+    compliance_status: "{{ 'Compliant' if output.value is defined and output.value == '1' else 'Not Compliant' }}"

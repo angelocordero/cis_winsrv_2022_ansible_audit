@@ -27,6 +27,6 @@
     compliance_status: >-
       {{
         'Compliant'
-        if output.results | map(attribute='value') | select('equalto', 1) | list | length == output.results | length
+        if output.results | map(attribute='value') | select('equalto', '1') | list | length == output.results | length
         else 'Not Compliant'
       }}
